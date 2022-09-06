@@ -1,27 +1,93 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>videojs-delightful-player Demo</title>
-  <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet">
-  <link href="dist/videojs-delightful-player.css" rel="stylesheet">
-</head>
-<body>
-  <video id="videojs-delightful-player-player" class="video-js vjs-default-skin" controls>
-    <source src="//vjs.zencdn.net/v/oceans.mp4" type='video/mp4'>
-    <source src="//vjs.zencdn.net/v/oceans.webm" type='video/webm'>
-  </video>
-  <ul>
-    <li><a href="/test/debug.html">Run unit tests in browser.</a></li>
-    <li><a href="docs/api/">Read generated docs.</a></li>
-  </ul>
-  <script src="node_modules/video.js/dist/video.js"></script>
-  <script src="dist/videojs-delightful-player.js"></script>
-  <script>
-    (function(window, videojs) {
-      var examplePlayer = window.examplePlayer = videojs('videojs-delightful-player-player');
-      var delightfulPlayer = window.delightfulPlayer = examplePlayer.delightfulPlayer();
-    }(window, window.videojs));
-  </script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>videojs-delightful-player Demo</title>
+    <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet" />
+    <link href="dist/videojs-delightful-player.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="color-div div1"></div>
+      <div class="color-div div2"></div>
+      <div class="div-url">
+        <select
+          onchange="getSelectValue()"
+          name="video-examples"
+          id="video-examples"
+        >
+          <option
+            value="http://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8"
+          >
+            Example 1
+          </option>
+          <option
+            value="http://playertest.longtailvideo.com/adaptive/wowzaid3/playlist.m3u8"
+          >
+            Example 2
+          </option>
+          <option
+            value="https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
+          >
+            Example 3
+          </option>
+          <option
+            value="http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8"
+          >
+            Example 4
+          </option>
+        </select>
+        <div class="div-input-btn">
+          <input id="input-url" type="text" placeholder="Enter a m3u8 url" />
+          <button id="submit-btn" onclick="getInputValue()">Submit</button>
+        </div>
+      </div>
+      <video
+        id="videojs-delightful-player-player"
+        class="video-js vjs-default-skin"
+        controls
+      >
+        <source
+          src="http://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8"
+          type="application/x-mpegURL"
+        />
+        <p class="vjs-no-js">
+          To view this video please enable JavaScript, and consider upgrading to
+          a web browser that
+          <a href="https://videojs.com/html5-video-support/" target="_blank"
+            >supports HTML5 video</a
+          >
+        </p>
+      </video>
+      <div class="color-div div3"></div>
+      <div class="color-div div4"></div>
+    </div>
+
+    <script src="node_modules/video.js/dist/video.js"></script>
+    <script src="dist/videojs-delightful-player.js"></script>
+    <script>
+      (function (window, videojs) {
+        var examplePlayer = (window.examplePlayer = videojs(
+          "videojs-delightful-player-player"
+        ));
+        var delightfulPlayer = (window.delightfulPlayer =
+          examplePlayer.delightfulPlayer());
+      })(window, window.videojs);
+    </script>
+    <script>
+      function getSelectValue() {
+        let file = document.getElementById("video-examples");
+        let value = file.options[file.selectedIndex].value;
+        let video = videojs("videojs-delightful-player-player");
+        video.src(value);
+      }
+      function getInputValue() {
+        let file = document.getElementById("input-url");
+        let video = videojs("videojs-delightful-player-player");
+        video.src(file.value);
+      }
+    </script>
+  </body>
 </html>
