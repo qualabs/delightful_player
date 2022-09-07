@@ -42,6 +42,8 @@
         <div class="div-input-btn">
           <input id="input-url" type="text" placeholder="Enter a m3u8 url" />
           <button id="submit-btn" onclick="getInputValue()">Submit</button>
+          <button onclick="selectFormat()">Format</button>
+          <div id="myData"></div>
         </div>
       </div>
       <video
@@ -87,6 +89,59 @@
         let file = document.getElementById("input-url");
         let video = videojs("videojs-delightful-player-player");
         video.src(file.value);
+      }
+    </script>
+    <script>
+      function selectFormat() {
+        let obj = {
+          mono: {}, //{"config": "mono", "channels": {"C": [150, 211, 132]}}
+          stereo: {
+            config: "stereo",
+            channels: { L: [216, 191, 216], R: [166, 203, 219] },
+          }, //{"config": "stereo", "channels": {"L": [216, 191, 216], "R":[166, 203, 219]}}
+          surround: {}, //{config: "surround", channels: {FL: [150, 211, 132],FR: [216, 191, 216],BL: [166, 203, 219],BR: [211, 132, 134]}
+        };
+
+        if (Object.keys(obj.mono).length !== 0) {
+          document.querySelector(
+            ".div1"
+          ).style.backgroundColor = `rgb(${obj.mono.channels.C})`;
+          document.querySelector(
+            ".div3"
+          ).style.backgroundColor = `rgb(${obj.mono.channels.C})`;
+          document.querySelector(
+            ".div2"
+          ).style.backgroundColor = `rgb(${obj.mono.channels.C})`;
+          document.querySelector(
+            ".div4"
+          ).style.backgroundColor = `rgb(${obj.mono.channels.C})`;
+        } else if (Object.keys(obj.stereo).length !== 0) {
+          document.querySelector(
+            ".div1"
+          ).style.backgroundColor = `rgb(${obj.stereo.channels.L})`;
+          document.querySelector(
+            ".div3"
+          ).style.backgroundColor = `rgb(${obj.stereo.channels.L})`;
+          document.querySelector(
+            ".div2"
+          ).style.backgroundColor = `rgb(${obj.stereo.channels.R})`;
+          document.querySelector(
+            ".div4"
+          ).style.backgroundColor = `rgb(${obj.stereo.channels.R})`;
+        } else if (Object.keys(obj.surround).length !== 0) {
+          document.querySelector(
+            ".div1"
+          ).style.backgroundColor = `rgb(${obj.surround.channels.FL})`;
+          document.querySelector(
+            ".div3"
+          ).style.backgroundColor = `rgb(${obj.surround.channels.BL})`;
+          document.querySelector(
+            ".div2"
+          ).style.backgroundColor = `rgb(${obj.surround.channels.FR})`;
+          document.querySelector(
+            ".div4"
+          ).style.backgroundColor = `rgb(${obj.surround.channels.BR})`;
+        }
       }
     </script>
   </body>

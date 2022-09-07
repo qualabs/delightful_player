@@ -15,22 +15,18 @@
 
 .div1 {
   grid-area: div1;
-  background-color: rosybrown;
 }
 
 .div2 {
   grid-area: div2;
-  background-color: aquamarine;
 }
 
 .div3 {
   grid-area: div3;
-  background-color: coral;
 }
 
 .div4 {
   grid-area: div4;
-  background-color: violet;
 }
 
 #videojs-delightful-player-player {
