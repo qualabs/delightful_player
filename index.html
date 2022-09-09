@@ -1,46 +1,61 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>videojs-delightful-player Demo</title>
-  <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet" />
-  <link href="dist/videojs-delightful-player.css" rel="stylesheet" />
-  <link rel="stylesheet" href="./css/styles.css" />
-</head>
-
-<body>
-  <div class="container">
-    <canvas class="canvas"></canvas>
-    <div class="color-div div1"></div>
-    <div class="color-div div2"></div>
-    <div class="div-url">
-      <select onchange="getSelectValue()" name="video-examples" id="video-examples">
-        <option value="http://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8">
-          Example 1
-        </option>
-        <option value="http://playertest.longtailvideo.com/adaptive/wowzaid3/playlist.m3u8">
-          Example 2
-        </option>
-        <option value="https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8">
-          Example 3
-        </option>
-        <option value="http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8">
-          Example 4
-        </option>
-      </select>
-      <div class="div-input-btn">
-        <input id="input-url" type="text" placeholder="Enter a m3u8 url" />
-        <button id="submit-btn" onclick="getInputValue()">Submit</button>
-        <button onclick="selectFormat()">Format</button>
-        <div id="myData"></div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>videojs-delightful-player Demo</title>
+    <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet" />
+    <link href="dist/videojs-delightful-player.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <canvas class="canvas"></canvas>
+      <div class="color-div div1"></div>
+      <div class="color-div div2"></div>
+      <div class="div-url">
+        <select
+          onchange="getSelectValue()"
+          name="video-examples"
+          id="video-examples"
+        >
+          <option
+            value="http://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8"
+          >
+            Example 1
+          </option>
+          <option
+            value="http://playertest.longtailvideo.com/adaptive/wowzaid3/playlist.m3u8"
+          >
+            Example 2
+          </option>
+          <option
+            value="https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
+          >
+            Example 3
+          </option>
+          <option
+            value="http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8"
+          >
+            Example 4
+          </option>
+        </select>
+        <div class="div-input-btn">
+          <input id="input-url" type="text" placeholder="Enter a m3u8 url" />
+          <button id="submit-btn" onclick="getInputValue()">Submit</button>
+          <button onclick="selectFormat(document)">Format</button>
+          <div id="myData"></div>
+        </div>
       </div>
-    </div>
-    
-      <video id="videojs-delightful-player-player" class="video-js vjs-default-skin" controls>
-        <source src="http://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8"
-          type="application/x-mpegURL" />
+      <video
+        id="videojs-delightful-player-player"
+        class="video-js vjs-default-skin"
+        controls
+      >
+        <source
+          src="http://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8"
+          type="application/x-mpegURL"
+        />
         <p class="vjs-no-js">
           To view this video please enable JavaScript, and consider upgrading to
           a web browser that
@@ -51,83 +66,34 @@
     <div class="color-div div4"></div>
   </div>
 
-  <script src="node_modules/video.js/dist/video.js"></script>
-  <script src="dist/videojs-delightful-player.js"></script>
-  <script>
-    (function (window, videojs) {
-      var examplePlayer = (window.examplePlayer = videojs(
-        "videojs-delightful-player-player"
-      ));
-      var delightfulPlayer = (window.delightfulPlayer =
-        examplePlayer.delightfulPlayer());
-    })(window, window.videojs);
-  </script>
-  <script>
-    function getSelectValue() {
-      let file = document.getElementById("video-examples");
-      let value = file.options[file.selectedIndex].value;
-      let video = videojs("videojs-delightful-player-player");
-      video.src(value);
-    }
-    function getInputValue() {
-      let file = document.getElementById("input-url");
-      let video = videojs("videojs-delightful-player-player");
-      video.src(file.value);
-    }
-  </script>
-  <script>
-    function selectFormat() {
-      let obj = {
-        mono: {}, //{"config": "mono", "channels": {"C": [150, 211, 132]}}
-        stereo: {
-          config: "stereo",
-          channels: { L: [216, 191, 216], R: [166, 203, 219] },
-        }, //{"config": "stereo", "channels": {"L": [216, 191, 216], "R":[166, 203, 219]}}
-        surround: {}, //{config: "surround", channels: {FL: [150, 211, 132],FR: [216, 191, 216],BL: [166, 203, 219],BR: [211, 132, 134]}
-      };
+    <script src="node_modules/video.js/dist/video.js"></script>
+    <script src="dist/videojs-delightful-player.js"></script>
+    <script>
+      (function (window, videojs) {
+        var examplePlayer = (window.examplePlayer = videojs(
+          "videojs-delightful-player-player"
+        ));
+        var delightfulPlayer = (window.delightfulPlayer =
+          examplePlayer.delightfulPlayer());
+      })(window, window.videojs);
+    </script>
 
-      if (Object.keys(obj.mono).length !== 0) {
-        document.querySelector(
-          ".div1"
-        ).style.backgroundColor = `rgb(${obj.mono.channels.C})`;
-        document.querySelector(
-          ".div3"
-        ).style.backgroundColor = `rgb(${obj.mono.channels.C})`;
-        document.querySelector(
-          ".div2"
-        ).style.backgroundColor = `rgb(${obj.mono.channels.C})`;
-        document.querySelector(
-          ".div4"
-        ).style.backgroundColor = `rgb(${obj.mono.channels.C})`;
-      } else if (Object.keys(obj.stereo).length !== 0) {
-        document.querySelector(
-          ".div1"
-        ).style.backgroundColor = `rgb(${obj.stereo.channels.L})`;
-        document.querySelector(
-          ".div3"
-        ).style.backgroundColor = `rgb(${obj.stereo.channels.L})`;
-        document.querySelector(
-          ".div2"
-        ).style.backgroundColor = `rgb(${obj.stereo.channels.R})`;
-        document.querySelector(
-          ".div4"
-        ).style.backgroundColor = `rgb(${obj.stereo.channels.R})`;
-      } else if (Object.keys(obj.surround).length !== 0) {
-        document.querySelector(
-          ".div1"
-        ).style.backgroundColor = `rgb(${obj.surround.channels.FL})`;
-        document.querySelector(
-          ".div3"
-        ).style.backgroundColor = `rgb(${obj.surround.channels.BL})`;
-        document.querySelector(
-          ".div2"
-        ).style.backgroundColor = `rgb(${obj.surround.channels.FR})`;
-        document.querySelector(
-          ".div4"
-        ).style.backgroundColor = `rgb(${obj.surround.channels.BR})`;
+    <!-- personal functions: -->
+    <script>
+      function getInputValue() {
+        const file = document.getElementById("input-url");
+        const video = videojs("videojs-delightful-player-player");
+        video.src(file.value);
       }
-    }
-  </script>
-</body>
-
+    </script>
+    <script>
+      function getSelectValue() {
+        const file = document.getElementById("video-examples");
+        const value = file.options[file.selectedIndex].value;
+        const video = videojs("videojs-delightful-player-player");
+        video.src(value);
+      }
+    </script>
+    <script src="./src/selectFormat.js"></script>
+  </body>
 </html>
