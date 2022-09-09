@@ -1,9 +1,18 @@
+// import getColorFormat from 'getColorFormat.js'; 
+
+
+// esta clase se encarga del modo
+
+
+
 function selectFormat(document) {
-  const obj = {
-    mono: { config: 'mono', channels: { C: [150, 211, 132] } },
-    stereo: {},
-    surround: {}
-  };
+  // const obj = {
+  //   mono: { config: 'mono', channels: { C: [150, 211, 132] } },
+  //   stereo: {},
+  //   surround: {}
+  // };
+  const obj = getColorFormat;
+  console.log(JSON.stringify(obj));
 
   if (Object.keys(obj.mono).length !== 0) {
     document.querySelector('.div1').style.backgroundColor = `rgb(${obj.mono.channels.C})`;
@@ -23,4 +32,4 @@ function selectFormat(document) {
   }
 }
 
-module.exports = selectFormat();
+// module.exports = selectFormat();
