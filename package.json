@@ -61,11 +61,6 @@
     "src/",
     "test/"
   ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "*.js": "vjsstandard --fix",
     "README.md": "doctoc --notitle"
