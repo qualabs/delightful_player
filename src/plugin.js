@@ -1,6 +1,7 @@
 import videojs from 'video.js';
 import {version as VERSION} from '../package.json';
-import { getModo, getColors, paintColors } from './Utils.js';
+import {getColors, paintColors} from './Utils.js';
+import {getModo} from './getModo.js'
 
 const Plugin = videojs.getPlugin('plugin');
 
@@ -60,7 +61,7 @@ class DelightfulPlayer extends Plugin {
 
     if (!player.paused() && !player.ended()) {
       ctx.drawImage(player.tech_.el_, 0, 0);
-      let modo   = getModo();
+      let modo   = getModo(document);
 
       let jsonColor = getColors(modo);
       paintColors(jsonColor);
