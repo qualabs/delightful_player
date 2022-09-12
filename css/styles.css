@@ -47,15 +47,14 @@
   position: absolute;
 }
 
-#video-examples {
+.selector {
   width: 130px;
   background: #fff;
-  color: #a3a3a3;
   font: inherit;
   box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.1);
   border: 0;
   outline: 0;
-  padding: 15px 15px;
+  padding: 15px;
 }
 
 .div-input-btn {
@@ -65,17 +64,15 @@
 #input-url {
   width: 360px;
   background: #fff;
-  color: #a3a3a3;
   font: inherit;
   box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.1);
   border: 0;
   outline: 0;
-  padding: 15px 15px;
+  padding: 15px;
 }
 
 #submit-btn {
   display: inline-block;
-  color: inherit;
   font: inherit;
   border: 0;
   outline: 0;
@@ -86,8 +83,7 @@
   color: #fff;
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
   border-radius: 2px;
-  padding: 10px 33px;
-  margin-left: -96px;
+  padding: 14px 23px;
 }
 
 #submit-btn:hover {
@@ -129,7 +125,7 @@
     align-items: center;
   }
 
-  #video-examples {
+  .selector {
     margin-bottom: 7px;
   }
 }
@@ -140,7 +136,7 @@
     width: 75vw;
   }
 
-  #video-examples {
+  .selector {
     width: 120px;
   }
 
