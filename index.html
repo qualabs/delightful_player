@@ -17,6 +17,7 @@
           onchange="getSelectValue()"
           name="video-examples"
           id="video-examples"
+          class="selector"
         >
           <option
             value="http://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8"
@@ -40,19 +41,31 @@
           </option>
         </select>
         <div class="div-input-btn">
-          <input id="input-url" type="text" placeholder="Enter a m3u8 url" />
+          <input id="input-url" type="text" placeholder="Enter a video url" />
           <button id="submit-btn" onclick="getInputValue()">Submit</button>
-          <button onclick="selectFormat(document)">Format</button>
+          <select
+            name="selectFormat"
+            id="selectFormat"
+            class="selector"
+            onchange="getModo(document)"
+          >
+            <option value="mono">Mono</option>
+            <option value="stereo">Stereo</option>
+            <option value="surround">Surround</option>
+          </select>
           <div id="myData"></div>
         </div>
       </div>
       <video
         id="videojs-delightful-player-player"
-        class="video-js vjs-default-skin"
+        class="video-js vjs-default-skin vjs-big-play-centered"
         controls
+        autoplay
+        muted
       >
         <source
-          src="http://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8"
+          id="my-source"
+          src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
           type="application/x-mpegURL"
         />
         <p class="vjs-no-js">
@@ -96,5 +109,6 @@
       }
     </script>
     <script src="./src/selectFormat.js"></script>
+    <script src="./src/getModo.js"></script>
   </body>
 </html>
