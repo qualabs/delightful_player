@@ -1,11 +1,20 @@
 # videojs-delightful-player
 
-
-
 ## Table of Contents
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [`<script>` Tag](#script-tag)
+  - [Browserify/CommonJS](#browserifycommonjs)
+  - [RequireJS/AMD](#requirejsamd)
+- [License](#license)
+  - [Example usage](#example-usage)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 ## Installation
 
 ```sh
@@ -63,5 +72,9 @@ require(['video.js', '@lights-plugin/videojs-delightful-player'], function(video
 
 MIT. Copyright (c) rodrigog-qualabs &lt;rodrigog@qualabs.com&gt;
 
-
 [videojs]: http://videojs.com/
+
+### Example usage
+
+Execute the application using `npm run start` and open `localhost:9999`.
+An example video (Big buck bunny) will be played automatically. In order to choose other examples, the select component can be used. It is also possible to enter other video urls in the input.

@@ -40,7 +40,7 @@
 }
 
 .div-url {
-  top: 15%;
+  top: 13%;
   left: 50%;
   margin-right: -50%;
   transform: translate(-50%, -50%);
@@ -48,13 +48,13 @@
 }
 
 .selector {
-  width: 130px;
+  width: 150px;
   background: #fff;
   font: inherit;
   box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.1);
   border: 0;
   outline: 0;
-  padding: 15px;
+  padding: 15px 10px;
 }
 
 .div-input-btn {
@@ -68,7 +68,7 @@
   box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.1);
   border: 0;
   outline: 0;
-  padding: 15px;
+  padding: 15px 10px;
 }
 
 #submit-btn {
@@ -97,13 +97,6 @@
 
 .canvas {
   display: none;
-}
-
-@media screen and (max-width: 1300px) {
-  #videojs-delightful-player-player {
-    height: 50vh;
-    width: 60vw;
-  }
 }
 
 @media screen and (max-width: 900px) {
