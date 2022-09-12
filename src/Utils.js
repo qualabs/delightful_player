@@ -55,13 +55,11 @@ function getPixels(channel){
     let average_red = Math.round(reds.reduce((partialSum, a) => partialSum + a, 0) / reds.length);
     let average_green = Math.round(greens.reduce((partialSum, a) => partialSum + a, 0) / greens.length);
     let average_blue = Math.round(blues.reduce((partialSum, a) => partialSum + a, 0) / blues.length);
-    console.log("find de get pixeles");
     return {"red": average_red, "green": average_green, "blue":average_blue}
 
 };
 
 export function getColors(type) {
-    console.log("welcome to getColors");
     let json_colors;
     switch(type) {
       case "mono":
@@ -70,7 +68,6 @@ export function getColors(type) {
         {"C": [average_pixels_C.red,average_pixels_C.green,average_pixels_C.blue]}};
         break;
       case "stereo":
-        console.log("ddfhieIFHADHdgf");
         let average_pixels_L = getPixels("L");
         let average_pixels_R = getPixels("R");
         json_colors = {"config": "stereo", "channels": 
@@ -93,44 +90,25 @@ export function getColors(type) {
     return json_colors;
   }
 
-//   getJson(playerPlugin){
-//     let modo   = getModo();
-//     videojs.log("hola json");
-//     console.log("hola json");
-//     let jsonColor = getColors(modo);
-//    this.player.trigger('framecolor',{content : jsonColor});
-    
-// }
-
-//esta clase es un pasamanos. es para pasarle al selectFormat el color 
-// export class createJson{
-
-//     constructor() {
-//         videojs.log("hola player");
-//         console.log("hola player");
-//         const player = playerPlugin;
-//     }
-
-//     getJson(playerPlugin){
-//         let modo   = getModo();
-//         videojs.log("hola json");
-//         console.log("hola json");
-//         let jsonColor = getColors(modo);
-//         // let jsonColor = {
-//         //     "mono":     { "config": "", "channels":{}}, 
-//         //     "stereo":   { "config": "", "channels":{}},
-//         //     "surround": { "config": "", "channels":{}}
-//         // };
-      
-//         // switch(modo){
-//         //     case "mono":     jsonColor.mono.config = modo; jsonColor.mono.channels = colors; break;
-//         //     case "stereo":   jsonColor.stereo.config = modo; jsonColor.stereo.channels = colors; break;
-//         //     case "surround": jsonColor.surround.config = modo; jsonColor.surround.channels = colors; break;
-//         // }
-
-//         this.player.trigger('framecolor',{content : jsonColor});
-        
-//     }
-//   }
-
-// export {createJson};
+export function paintColors(json_colors){
+    let div1 = document.querySelector(".div1");
+    let div2 = document.querySelector(".div2");
+    let div3 = document.querySelector(".div3");
+    let div4 = document.querySelector(".div4");
+    if (json_colors.config === "mono" && (json_colors.channels).length !== 0) {
+      div1.style.backgroundColor = `rgb(${json_colors.channels.C})`;
+      div3.style.backgroundColor = `rgb(${json_colors.channels.C})`;
+      div2.style.backgroundColor = `rgb(${json_colors.channels.C})`;
+      div4.style.backgroundColor = `rgb(${json_colors.channels.C})`;
+    } else if (json_colors.config === "stereo" && (json_colors.channels).length !== 0) {
+      div1.style.backgroundColor = `rgb(${json_colors.channels.L})`;
+      div3.style.backgroundColor = `rgb(${json_colors.channels.L})`;
+      div2.style.backgroundColor = `rgb(${json_colors.channels.R})`;
+      div4.style.backgroundColor = `rgb(${json_colors.channels.R})`;
+    } else if (json_colors.config === "surround" && (json_colors.channels).length !== 0) {
+      div1.style.backgroundColor = `rgb(${json_colors.channels.FL})`;
+      div3.style.backgroundColor = `rgb(${json_colors.channels.BL})`;
+      div2.style.backgroundColor = `rgb(${json_colors.channels.FR})`;
+      div4.style.backgroundColor = `rgb(${json_colors.channels.BR})`;
+    }
+  };

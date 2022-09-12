@@ -1,6 +1,6 @@
 import videojs from 'video.js';
 import {version as VERSION} from '../package.json';
-import { getModo, getColors } from './createJson.js';
+import { getModo, getColors, paintColors } from './Utils.js';
 
 const Plugin = videojs.getPlugin('plugin');
 
@@ -41,9 +41,9 @@ class DelightfulPlayer extends Plugin {
       let canvas = document.querySelector(".canvas");
       let video = this.player.tech_.el_;
       canvas.width = video.videoWidth;
-      videojs.log('canvas.width ' + canvas.width);
+      // videojs.log('canvas.width ' + canvas.width);
       canvas.height = video.videoHeight;
-      videojs.log('canvas.height ' + canvas.height);
+      // videojs.log('canvas.height ' + canvas.height);
     });
 
     this.player.on('playing', function() {
@@ -55,57 +55,18 @@ class DelightfulPlayer extends Plugin {
   }
 
   loop(player) {
-    videojs.log('starting color!');
     let canvas = document.querySelector(".canvas");
     let ctx = canvas.getContext('2d');
 
     if (!player.paused() && !player.ended()) {
       ctx.drawImage(player.tech_.el_, 0, 0);
-      videojs.log("antes json");
-
       let modo   = getModo();
 
-      videojs.log("el modo es " + modo);
       let jsonColor = getColors(modo);
-      videojs.log("estos en pugin" + JSON.stringify(jsonColor));
-      console.log("player " + player);
-      //console.log("player.player " + player.playerId);
-      //player.trigger('framecolor', jsonColor);
-
-      videojs.log("antes on");
-      this.paintColors(jsonColor);
-      // player.on('framecolor',function(json_colors){
-      //   videojs.log("estoy en el on ");
-      //   // videojs.log('the color value is' + color);
-      //   this.paintColors(json_colors);
-      //   videojs.log("olakace");
-      // })      
+      paintColors(jsonColor);
       setTimeout(this.loop.bind(this, player), 1000 / 30); // drawing at 30fps
     }
   }
-
-  paintColors(json_colors){
-    let div1 = document.querySelector(".div1");
-    let div2 = document.querySelector(".div2");
-    let div3 = document.querySelector(".div3");
-    let div4 = document.querySelector(".div4");
-    if (json_colors.config === "mono" && (json_colors.channels).length !== 0) {
-      div1.style.backgroundColor = `rgb(${json_colors.channels.C})`;
-      div3.style.backgroundColor = `rgb(${json_colors.channels.C})`;
-      div2.style.backgroundColor = `rgb(${json_colors.channels.C})`;
-      div4.style.backgroundColor = `rgb(${json_colors.channels.C})`;
-    } else if (json_colors.config === "stereo" && (json_colors.channels).length !== 0) {
-      div1.style.backgroundColor = `rgb(${json_colors.channels.L})`;
-      div3.style.backgroundColor = `rgb(${json_colors.channels.L})`;
-      div2.style.backgroundColor = `rgb(${json_colors.channels.R})`;
-      div4.style.backgroundColor = `rgb(${json_colors.channels.R})`;
-    } else if (json_colors.config === "surround" && (json_colors.channels).length !== 0) {
-      div1.style.backgroundColor = `rgb(${json_colors.channels.FL})`;
-      div3.style.backgroundColor = `rgb(${json_colors.channels.BL})`;
-      div2.style.backgroundColor = `rgb(${json_colors.channels.FR})`;
-      div4.style.backgroundColor = `rgb(${json_colors.channels.BR})`;
-    }
-  };
 }
 
 // Define default values for the plugin's `state` object here.
@@ -116,8 +77,5 @@ DelightfulPlayer.VERSION = VERSION;
 
 // Register the plugin with video.js.
 videojs.registerPlugin('delightfulPlayer', DelightfulPlayer);
-
-
-
 
 export default DelightfulPlayer;
