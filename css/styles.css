@@ -99,6 +99,10 @@
   display: none;
 }
 
+.vjs-control-bar > .light-btn {
+  padding: 9px 0;
+}
+
 @media screen and (max-width: 900px) {
   #videojs-delightful-player-player {
     height: 45vh;
