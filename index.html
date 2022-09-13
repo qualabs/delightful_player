@@ -72,12 +72,14 @@
         <p class="vjs-no-js">
           To view this video please enable JavaScript, and consider upgrading to
           a web browser that
-          <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+          <a href="https://videojs.com/html5-video-support/" target="_blank"
+            >supports HTML5 video</a
+          >
         </p>
       </video>
-    <div class="color-div div3"></div>
-    <div class="color-div div4"></div>
-  </div>
+      <div class="color-div div3"></div>
+      <div class="color-div div4"></div>
+    </div>
 
     <script src="node_modules/video.js/dist/video.js"></script>
     <script src="dist/videojs-delightful-player.js"></script>
@@ -97,6 +99,32 @@
         const file = document.getElementById("input-url");
         const video = videojs("videojs-delightful-player-player");
         video.src(file.value);
+        const videoExtension = video.src().split(".").pop();
+        console.log(videoExtension);
+        // MP4:
+        if (videoExtension === "mp4") {
+          video.src({
+            src: file.value,
+            type: "video/mp4",
+          });
+        } // HLS:
+        else if (videoExtension === "m3u8") {
+          video.src({
+            src: file.value,
+            type: "application/x-mpegURL",
+          });
+        } // DASH:
+        else if (videoExtension === "mpd") {
+          video.src({
+            src: file.value,
+            type: "application/dash+xml",
+          });
+        }
+        //TODO: check why video.type returns undefined but reproduces the video anyway
+        console.log({
+          src: video.src(),
+          type: video.type,
+        });
       }
     </script>
     <script>
