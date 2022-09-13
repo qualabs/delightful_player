@@ -72,6 +72,8 @@ require(['video.js', '@lights-plugin/videojs-delightful-player'], function(video
 Execute the application using `npm run start` and open `localhost:9999`.
 An example video (Big buck bunny) will be played automatically. In order to choose other examples, the select component can be used. It is also possible to enter other video urls in the input.
 
+The example file is [index.html](https://github.com/qualabs/delightful_player/blob/M1_Documentation/index.html).
+
 #### Light configuration
 
 To select the light configuration wanted, click on the button called `Lights` located on the right-bottom corner of the video player.
