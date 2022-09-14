@@ -12,6 +12,9 @@ const defaults = {
 };
 let mode = defaults.mode;
 
+const ws = new WebSocket("ws://192.168.107.219:5678/");
+
+
 /**
  * An advanced Video.js plugin. For more information on the API
  *
@@ -40,6 +43,9 @@ class DelightfulPlayer extends Plugin {
 
     this.player.ready(() => {
       this.player.addClass('vjs-delightful-player2');
+      // const ws = new WebSocket("ws://127.0.0.1:5678/");
+      console.log("webSocket construido con exito " + ws);
+
     });
 
     this.player.on('loadedmetadata', () => {
@@ -47,6 +53,8 @@ class DelightfulPlayer extends Plugin {
       let video = this.player.tech_.el_;
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
+      // const ws = new WebSocket("ws://127.0.0.1:5678/");
+      // console.log("webSocket construido con exito " + ws);
     });
 
     this.player.on('playing', function() {
@@ -60,7 +68,6 @@ class DelightfulPlayer extends Plugin {
     this.player.on('mode', function(event, new_modo) {
       mode = new_modo.content;
     });
-
   }
 
   loop(player) {
@@ -71,6 +78,16 @@ class DelightfulPlayer extends Plugin {
       ctx.drawImage(player.tech_.el_, 0, 0);
       let jsonColor = getColors(mode);
       paintColors(jsonColor);
+      try{
+        const msg = JSON.stringify(jsonColor);
+        while(ws.readyState != 1){
+          console.log("websocket not open");
+        }
+        ws.send(msg);
+      } catch(error){
+        console.log('error en el send ' + error);
+      }
+      console.log("Msg sent ", JSON.stringify(jsonColor));
       setTimeout(this.loop.bind(this, player), 1000 / 30); // drawing at 30fps
     }
   }
