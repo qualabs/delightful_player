@@ -3,7 +3,7 @@ import {version as VERSION} from '../package.json';
 import {getColors, paintColors} from './Utils.js';
 import './menu.js'
 import CustomMenuButton from './menu.js';
-import * as config from './config.js';
+import * as config from '../config.js';
 import {ws} from './clientSocket.js';
 
 const Plugin = videojs.getPlugin('plugin');

@@ -1,4 +1,4 @@
-import * as config from './config.js';
+import * as config from '../config.js';
 
 const IP = config.SERVER_IP;
 const PORT = config.SERVER_PORT;
