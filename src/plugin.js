@@ -1,12 +1,16 @@
 import videojs from 'video.js';
 import {version as VERSION} from '../package.json';
 import {getColors, paintColors} from './Utils.js';
-import {getModo} from './getModo.js'
+import './menu.js'
+import CustomMenuButton from './menu.js';
 
 const Plugin = videojs.getPlugin('plugin');
 
 // Default options for the plugin.
-const defaults = {};
+const defaults = {
+  mode: "mono"
+};
+let mode = defaults.mode;
 
 /**
  * An advanced Video.js plugin. For more information on the API
@@ -42,9 +46,7 @@ class DelightfulPlayer extends Plugin {
       let canvas = document.querySelector(".canvas");
       let video = this.player.tech_.el_;
       canvas.width = video.videoWidth;
-      // videojs.log('canvas.width ' + canvas.width);
       canvas.height = video.videoHeight;
-      // videojs.log('canvas.height ' + canvas.height);
     });
 
     this.player.on('playing', function() {
@@ -52,7 +54,13 @@ class DelightfulPlayer extends Plugin {
     });
 
     this.player.on('play', this.loop.bind(this, this.player));
-    // player.controlBar.addChild('QualitySelector', options);
+    let menu_button = new CustomMenuButton(this.player, this.options)
+    player.controlBar.addChild(menu_button)
+
+    this.player.on('mode', function(event, new_modo) {
+      mode = new_modo.content;
+    });
+
   }
 
   loop(player) {
@@ -61,9 +69,7 @@ class DelightfulPlayer extends Plugin {
 
     if (!player.paused() && !player.ended()) {
       ctx.drawImage(player.tech_.el_, 0, 0);
-      let modo   = getModo(document);
-
-      let jsonColor = getColors(modo);
+      let jsonColor = getColors(mode);
       paintColors(jsonColor);
       setTimeout(this.loop.bind(this, player), 1000 / 30); // drawing at 30fps
     }

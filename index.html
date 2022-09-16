@@ -20,42 +20,28 @@
           id="video-examples"
           class="selector"
         >
-          <option
-            selected
-            value="http://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8"
-          >
-            Example 1
+          <option value="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8">
+            Big buck bunny
           </option>
           <option
             value="http://playertest.longtailvideo.com/adaptive/wowzaid3/playlist.m3u8"
           >
-            Example 2
+            Animals
           </option>
           <option
             value="https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
           >
-            Example 3
+            Durian open movie
           </option>
           <option
-            value="http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8"
+            value="http://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8"
           >
-            Example 4
+            Skate
           </option>
         </select>
         <div class="div-input-btn">
           <input id="input-url" type="text" placeholder="Enter a video url" />
           <button id="submit-btn" onclick="getInputValue()">Submit</button>
-          <select
-            name="selectFormat"
-            id="selectFormat"
-            class="selector"
-            onchange="getModo(document)"
-          >
-            <option value="mono">Mono</option>
-            <option value="stereo">Stereo</option>
-            <option value="surround">Surround</option>
-          </select>
-          <div id="myData"></div>
         </div>
       </div>
       <video
@@ -87,7 +73,7 @@
         const file = document.getElementById("input-url");
         const video = videojs("videojs-delightful-player-player");
         const videoExtension = file.value.split(".").pop();
-        // TODO: cuando le pasamos un mp4 deja de andar el canvas
+        // TODO: googlear como getear la image desde mp4 (para el canvas)
         // MP4:
         // video for test: http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4
         if (videoExtension === "mp4") {
