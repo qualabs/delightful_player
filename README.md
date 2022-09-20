@@ -5,7 +5,6 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Installation](#installation)
 - [Usage](#usage)
   - [`<script>` Tag](#script-tag)
@@ -68,13 +67,23 @@ require(['video.js', '@lights-plugin/videojs-delightful-player'], function(video
 });
 ```
 
+### Example usage
+
+Execute the application using `npm run start` and open `localhost:9999`.
+An example video (Big buck bunny) will be played automatically. In order to choose other examples, the select component can be used. It is also possible to enter other video urls in the input.
+
+The example file is [index.html](https://github.com/qualabs/delightful_player/blob/M1_Documentation/index.html).
+
+#### Light configuration
+
+To select the light configuration wanted, click on the button called `Lights` located on the right-bottom corner of the video player.
+
+There are 3 different formats: mono, stereo and surround.
+
+With the `mono` configuration, the entire screen will change to the same color, with `stereo`, the screen will be divided in two and each half will have the predominant color of the video on that side of the screen. Finally, with the `surround` configuration, the screen will be divided in four quadrants.
+
 ## License
 
 MIT. Copyright (c) rodrigog-qualabs &lt;rodrigog@qualabs.com&gt;
 
 [videojs]: http://videojs.com/
-
-### Example usage
-
-Execute the application using `npm run start` and open `localhost:9999`.
-An example video (Big buck bunny) will be played automatically. In order to choose other examples, the select component can be used. It is also possible to enter other video urls in the input.
