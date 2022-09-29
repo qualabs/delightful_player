@@ -38,17 +38,6 @@
         <div class="div-input-btn">
           <input id="input-url" type="text" placeholder="Enter a video url" />
           <button id="submit-btn" onclick="getInputValue()">Submit</button>
-          <select
-            name="selectFormat"
-            id="selectFormat"
-            class="selector"
-            onchange="getModo(document)"
-          >
-            <option value="mono">Mono</option>
-            <option value="stereo">Stereo</option>
-            <option value="surround">Surround</option>
-          </select>
-          <div id="myData"></div>
         </div>
       </div>
       <div data-vjs-player>
@@ -58,7 +47,7 @@
           controls
           muted
         >
-          <!-- <track label="color" default src="./subtitles/subtitles.vtt" /> -->
+          <track label="color" default src="./subtitles/subtitles.vtt" />
           <source
             id="my-source"
             src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
@@ -105,7 +94,5 @@
         video.src(value);
       }
     </script>
-    <script src="./src/selectFormat.js"></script>
-    <script src="./src/getModo.js"></script>
   </body>
 </html>

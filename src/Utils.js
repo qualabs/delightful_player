@@ -57,7 +57,6 @@ function getCoordenates(channel) {
 
 function getPixels(channel) {
   // obtain a sub image
-
   let coord = getCoordenates(channel);
   let image = ctx.getImageData(coord.sx, coord.sy, coord.sw, coord.sh);
   let pixels_data = image.data;
@@ -72,6 +71,7 @@ function getPixels(channel) {
     greens[counter] = pixels_data[i + 1];
     blues[counter] = pixels_data[i + 2];
   }
+
   // calculate the average
   let average_red = Math.round(
     reds.reduce((partialSum, a) => partialSum + a, 0) / reds.length
