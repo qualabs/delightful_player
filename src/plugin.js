@@ -3,6 +3,8 @@ import {version as VERSION} from '../package.json';
 import {getColors, paintColors} from './Utils.js';
 import './menu.js'
 import CustomMenuButton from './menu.js';
+import * as config from '../config.js';
+import {ws} from './clientSocket.js';
 
 const Plugin = videojs.getPlugin('plugin');
 
@@ -11,6 +13,7 @@ const defaults = {
   mode: "mono"
 };
 let mode = defaults.mode;
+
 
 /**
  * An advanced Video.js plugin. For more information on the API
@@ -60,7 +63,6 @@ class DelightfulPlayer extends Plugin {
     this.player.on('mode', function(event, new_modo) {
       mode = new_modo.content;
     });
-
   }
 
   loop(player) {
@@ -70,7 +72,19 @@ class DelightfulPlayer extends Plugin {
     if (!player.paused() && !player.ended()) {
       ctx.drawImage(player.tech_.el_, 0, 0);
       let jsonColor = getColors(mode);
-      paintColors(jsonColor);
+      if (!config.MODOWEB){
+        try{
+          const msg = JSON.stringify(jsonColor);
+          if (ws.readyState == 1){
+            ws.send(msg);
+          }
+        } catch(error){
+          console.log('Error when send package. Error: ' + error);
+        }
+      }else{
+        paintColors(jsonColor);
+      }
+      console.log("Msg sent ", JSON.stringify(jsonColor));
       setTimeout(this.loop.bind(this, player), 1000 / 30); // drawing at 30fps
     }
   }
