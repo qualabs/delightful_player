@@ -4,16 +4,20 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
+- [Introduction](#introduction)
 - [Installation](#installation)
 - [Usage](#usage)
   - [`<script>` Tag](#script-tag)
-  - [Browserify/CommonJS](#browserifycommonjs)
-  - [RequireJS/AMD](#requirejsamd)
-- [License](#license)
   - [Example usage](#example-usage)
+- [Config.js file](#config_file) 
+- [Video Formats](#video-formats) 
+- [Light configuration](#light-configuration) 
+- [License](#license)
+  
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+## Introduction
+The mainly feature of this plugin is that takes the average pixels from a video, and enlight the environment according with the predominant colors. There are 3 modes to see the lights (see `Light configuration` section)
 ## Installation
 
 ```sh
@@ -38,52 +42,35 @@ This is the simplest case. Get the script in whatever way you prefer and include
 </script>
 ```
 
-### Browserify/CommonJS
-
-When using with Browserify, install videojs-delightful-player via npm and `require` the plugin as you would any other module.
-
-```js
-var videojs = require('video.js');
-
-// The actual plugin function is exported by this module, but it is also
-// attached to the `Player.prototype`; so, there is no need to assign it
-// to a variable.
-require('@lights-plugin/videojs-delightful-player');
-
-var player = videojs('my-video');
-
-player.delightfulPlayer();
-```
-
-### RequireJS/AMD
-
-When using with RequireJS (or another AMD library), get the script in whatever way you prefer and `require` the plugin as you normally would:
-
-```js
-require(['video.js', '@lights-plugin/videojs-delightful-player'], function(videojs) {
-  var player = videojs('my-video');
-
-  player.delightfulPlayer();
-});
-```
-
 ### Example usage
 
-Execute the application using `npm run start` and open `localhost:9999`.
+Execute the application using 
+```html 
+npm run start
+```
+and open in your browser 
+```html 
+localhost:9999
+```
+
 An example video (Big buck bunny) will be played automatically. In order to choose other examples, the select component can be used. It is also possible to enter other video urls in the input.
 
 The example file is [index.html](https://github.com/qualabs/delightful_player/blob/M1_Documentation/index.html).
 
-#### Light configuration
+### Config.js file
+Under this file you'll find a couple of parameters.
+- MODOWEB: if this value is true, you'll see the video colors in the web, in divs objects. If you want to use the lights, you have to set this parameter in false. Also you have to set the IP and PORT of the server. 
+- SERVER_IP, SERVER_PORT: raspberry pi IP and port, where is running the code that receive the pixel colors and turn on the corresponding light.
+
+### Video Formats
+For now, it's possible playback m3u8(hls) or dash videos. 
+### Light configuration
 
 To select the light configuration wanted, click on the button called `Lights` located on the right-bottom corner of the video player.
 
 There are 3 different formats: mono, stereo and surround.
 
-With the `mono` configuration, the entire screen will change to the same color, with `stereo`, the screen will be divided in two and each half will have the predominant color of the video on that side of the screen. Finally, with the `surround` configuration, the screen will be divided in four quadrants.
+With the `mono` configuration, all lights will show the same color, with `stereo`, the half of the lights will show the predominant color from a middle of the video and the others lights will show the predominant color from the other half. Finally, with the `surround` configuration, the screen will be divided in four quadrants and every light will show the predominant color from each quadrant.
 
-## License
-
-MIT. Copyright (c) rodrigog-qualabs &lt;rodrigog@qualabs.com&gt;
-
-[videojs]: http://videojs.com/
+### License
+Qualabs
