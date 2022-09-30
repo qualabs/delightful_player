@@ -9,15 +9,16 @@
 - [Usage](#usage)
   - [`<script>` Tag](#script-tag)
   - [Example usage](#example-usage)
-- [Config.js file](#config_file) 
-- [Video Formats](#video-formats) 
-- [Light configuration](#light-configuration) 
+- [Config file](#config-file)
+- [Video Formats](#video-formats)
+- [Light configuration](#light-configuration)
 - [License](#license)
   
-
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 ## Introduction
+
 The mainly feature of this plugin is that takes the average pixels from a video, and enlight the environment according with the predominant colors. There are 3 modes to see the lights (see `Light configuration` section)
+
 ## Installation
 
 ```sh
@@ -30,7 +31,7 @@ To include videojs-delightful-player on your website or web application, use any
 
 ### `<script>` Tag
 
-This is the simplest case. Get the script in whatever way you prefer and include the plugin _after_ you include [video.js][videojs], so that the `videojs` global is available.
+This is the simplest case. Get the script in whatever way you prefer and include the plugin _after_ you include [video.js](https://videojs.com/), so that the `videojs` global is available.
 
 ```html
 <script src="//path/to/video.min.js"></script>
@@ -44,33 +45,41 @@ This is the simplest case. Get the script in whatever way you prefer and include
 
 ### Example usage
 
-Execute the application using 
-```html 
+Execute the application using
+
+```html
 npm run start
 ```
-and open in your browser 
-```html 
+
+and open in your browser
+
+```html
 localhost:9999
 ```
 
 An example video (Big buck bunny) will be played automatically. In order to choose other examples, the select component can be used. It is also possible to enter other video urls in the input.
 
-The example file is [index.html](https://github.com/qualabs/delightful_player/blob/M1_Documentation/index.html).
+The example file is [index.html](https://github.com/qualabs/delightful_player/blob/main/index.html).
 
-### Config.js file
+### Config file
+
 Under this file you'll find a couple of parameters.
-- MODOWEB: if this value is true, you'll see the video colors in the web, in divs objects. If you want to use the lights, you have to set this parameter in false. Also you have to set the IP and PORT of the server. 
+
+- MODOWEB: if this value is true, you'll see the video colors in the web, in divs objects. If you want to use the lights, you have to set this parameter in false. Also you have to set the IP and PORT of the server.
 - SERVER_IP, SERVER_PORT: raspberry pi IP and port, where is running the code that receive the pixel colors and turn on the corresponding light.
 
 ### Video Formats
-For now, it's possible playback m3u8(hls) or dash videos. 
+
+For now, it's possible to do playback with m3u8(hls) or dash videos.
+
 ### Light configuration
 
 To select the light configuration wanted, click on the button called `Lights` located on the right-bottom corner of the video player.
 
 There are 3 different formats: mono, stereo and surround.
 
-With the `mono` configuration, all lights will show the same color, with `stereo`, the half of the lights will show the predominant color from a middle of the video and the others lights will show the predominant color from the other half. Finally, with the `surround` configuration, the screen will be divided in four quadrants and every light will show the predominant color from each quadrant.
+With the `mono` configuration, all lights will show the same color, with `stereo`, half of the lights will show the predominant color from half of the video and the other lights will show the predominant color from the other half. Finally, with the `surround` configuration, the screen will be divided in four quadrants and every light will show the predominant color from each quadrant.
 
 ### License
+
 Qualabs
