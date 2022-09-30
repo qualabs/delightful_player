@@ -28,11 +28,7 @@
           >
             Animals
           </option>
-          <option
-            value="https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
-          >
-            Durian open movie
-          </option>
+          <option value="http://localhost:9999/video/cars2.mp4">Cars 2</option>
           <option
             value="http://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8"
           >
@@ -44,13 +40,28 @@
           <button id="submit-btn" onclick="getInputValue()">Submit</button>
         </div>
       </div>
-      <video
-        id="videojs-delightful-player-player"
-        class="video-js vjs-default-skin vjs-big-play-centered"
-        controls
-        autoplay
-        muted
-      ></video>
+      <div data-vjs-player>
+        <video
+          id="videojs-delightful-player-player"
+          class="video-js vjs-default-skin vjs-big-play-centered"
+          controls
+          muted
+        >
+          <!-- <track label="color" default src="./subtitles/subtitlesCars2.vtt" /> -->
+          <source
+            id="my-source"
+            src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+            type="application/x-mpegURL"
+          />
+          <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading
+            to a web browser that
+            <a href="https://videojs.com/html5-video-support/" target="_blank"
+              >supports HTML5 video</a
+            >
+          </p>
+        </video>
+      </div>
       <div class="color-div div3"></div>
       <div class="color-div div4"></div>
     </div>

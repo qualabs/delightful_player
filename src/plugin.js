@@ -1,19 +1,18 @@
-import videojs from 'video.js';
-import {version as VERSION} from '../package.json';
-import {getColors, paintColors} from './Utils.js';
-import './menu.js'
-import CustomMenuButton from './menu.js';
-import * as config from '../config.js';
-import {ws} from './clientSocket.js';
+import videojs from "video.js";
+import { version as VERSION } from "../package.json";
+import { getColors, paintColors } from "./Utils.js";
+import "./menu.js";
+import CustomMenuButton from "./menu.js";
+import * as config from "../config.js";
+import { ws } from "./clientSocket.js";
 
-const Plugin = videojs.getPlugin('plugin');
+const Plugin = videojs.getPlugin("plugin");
 
 // Default options for the plugin.
 const defaults = {
-  mode: "mono"
+  mode: "mono",
 };
 let mode = defaults.mode;
-
 
 /**
  * An advanced Video.js plugin. For more information on the API
@@ -21,7 +20,6 @@ let mode = defaults.mode;
  * See: https://blog.videojs.com/feature-spotlight-advanced-plugins/
  */
 class DelightfulPlayer extends Plugin {
-
   /**
    * Create a DelightfulPlayer plugin instance.
    *
@@ -42,46 +40,96 @@ class DelightfulPlayer extends Plugin {
     this.options = videojs.mergeOptions(defaults, options);
 
     this.player.ready(() => {
-      this.player.addClass('vjs-delightful-player2');
+      this.player.addClass("vjs-delightful-player2");
     });
 
-    this.player.on('loadedmetadata', () => {
+    this.player.on("loadedmetadata", () => {
       let canvas = document.querySelector(".canvas");
       let video = this.player.tech_.el_;
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
     });
 
-    this.player.on('playing', function() {
-      videojs.log('playback began!');
+    this.player.on("playing", function () {
+      videojs.log("playback began!");
     });
 
-    this.player.on('play', this.loop.bind(this, this.player));
-    let menu_button = new CustomMenuButton(this.player, this.options)
-    player.controlBar.addChild(menu_button)
+    this.player.on("canplay", this.textColor.bind(this, this.player));
 
-    this.player.on('mode', function(event, new_modo) {
+    this.player.on("mode", function (event, new_modo) {
       mode = new_modo.content;
     });
   }
 
+  textColor(player) {
+    if (player.textTracks_.tracks_.length > 0) {
+      let trackExist = false;
+      let tracks = player.textTracks_.tracks_;
+      let i = 0;
+      while (!trackExist && i < tracks.length) {
+        if (tracks[i].src) {
+          trackExist = true;
+        }
+        i++;
+      }
+      if (trackExist) {
+        console.log("tracks");
+        this.sendColorFromTrack(player);
+      } else {
+        console.log("canvas");
+        player.on("play", this.loop.bind(this, this.player));
+        let menu_button = new CustomMenuButton(this.player, this.options);
+        player.controlBar.addChild(menu_button);
+      }
+    }
+  }
+
+  sendColorFromTrack(player) {
+    // Get all text tracks for the current player.
+    let tracks = player.textTracks_.tracks_;
+
+    for (let i = 0; i < tracks.length; i++) {
+      let track = tracks[i];
+      
+
+      track.oncuechange = () => {
+        if (track.activeCues.length > 0) {
+          // Parse the cue as JSON
+          let color = JSON.parse(track.activeCues[0].text);
+          console.log("color: ", color);
+          track.mode = "hidden";
+          if (color.config) {
+            try {
+              const msg = JSON.stringify(color);
+              if (ws.readyState == 1) {
+                ws.send(msg);
+              }
+            } catch (error) {
+              console.log("Error when send package. Error: " + error);
+            }
+          }
+        }
+      };
+    }
+  }
+
   loop(player) {
     let canvas = document.querySelector(".canvas");
-    let ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext("2d");
 
     if (!player.paused() && !player.ended()) {
       ctx.drawImage(player.tech_.el_, 0, 0);
       let jsonColor = getColors(mode);
-      if (!config.MODOWEB){
-        try{
+      if (!config.MODOWEB) {
+        try {
           const msg = JSON.stringify(jsonColor);
-          if (ws.readyState == 1){
+          if (ws.readyState == 1) {
             ws.send(msg);
           }
-        } catch(error){
-          console.log('Error when send package. Error: ' + error);
+        } catch (error) {
+          console.log("Error when send package. Error: " + error);
         }
-      }else{
+      } else {
         paintColors(jsonColor);
       }
       console.log("Msg sent ", JSON.stringify(jsonColor));
@@ -97,6 +145,6 @@ DelightfulPlayer.defaultState = {};
 DelightfulPlayer.VERSION = VERSION;
 
 // Register the plugin with video.js.
-videojs.registerPlugin('delightfulPlayer', DelightfulPlayer);
+videojs.registerPlugin("delightfulPlayer", DelightfulPlayer);
 
 export default DelightfulPlayer;
