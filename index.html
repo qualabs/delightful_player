@@ -83,7 +83,22 @@
       function getInputValue() {
         const file = document.getElementById("input-url");
         const video = videojs("videojs-delightful-player-player");
-        video.src(file.value);
+        const videoExtension = file.value.split(".").pop();
+        // HLS:
+        // video for test: https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8
+        if (videoExtension === "m3u8") {
+          video.src({
+            src: file.value,
+            type: "application/x-mpegURL",
+          });
+        } // DASH:
+        // video for test: https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd
+        else if (videoExtension === "mpd") {
+          video.src({
+            src: file.value,
+            type: "application/dash+xml",
+          });
+        }
       }
     </script>
     <script>
@@ -93,6 +108,9 @@
         const video = videojs("videojs-delightful-player-player");
         video.src(value);
       }
+    </script>
+    <script>
+      window.onload = getSelectValue();
     </script>
   </body>
 </html>
