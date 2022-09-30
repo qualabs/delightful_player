@@ -73,17 +73,9 @@
         const file = document.getElementById("input-url");
         const video = videojs("videojs-delightful-player-player");
         const videoExtension = file.value.split(".").pop();
-        // TODO: googlear como getear la image desde mp4 (para el canvas)
-        // MP4:
-        // video for test: http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4
-        if (videoExtension === "mp4") {
-          video.src({
-            src: file.value,
-            type: "video/mp4",
-          });
-        } // HLS:
+        // HLS:
         // video for test: https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8
-        else if (videoExtension === "m3u8") {
+        if (videoExtension === "m3u8") {
           video.src({
             src: file.value,
             type: "application/x-mpegURL",
