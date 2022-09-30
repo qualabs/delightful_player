@@ -50,21 +50,10 @@
         controls
         autoplay
         muted
-      >
-        <source
-          id="my-source"
-          src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-          type="application/x-mpegURL"
-        />
-        <p class="vjs-no-js">
-          To view this video please enable JavaScript, and consider upgrading to
-          a web browser that
-          <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-        </p>
-      </video>
-    <div class="color-div div3"></div>
-    <div class="color-div div4"></div>
-  </div>
+      ></video>
+      <div class="color-div div3"></div>
+      <div class="color-div div4"></div>
+    </div>
 
     <script src="node_modules/video.js/dist/video.js"></script>
     <script src="dist/videojs-delightful-player.js"></script>
@@ -83,7 +72,22 @@
       function getInputValue() {
         const file = document.getElementById("input-url");
         const video = videojs("videojs-delightful-player-player");
-        video.src(file.value);
+        const videoExtension = file.value.split(".").pop();
+        // HLS:
+        // video for test: https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8
+        if (videoExtension === "m3u8") {
+          video.src({
+            src: file.value,
+            type: "application/x-mpegURL",
+          });
+        } // DASH:
+        // video for test: https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd
+        else if (videoExtension === "mpd") {
+          video.src({
+            src: file.value,
+            type: "application/dash+xml",
+          });
+        }
       }
     </script>
     <script>
@@ -93,6 +97,9 @@
         const video = videojs("videojs-delightful-player-player");
         video.src(value);
       }
+    </script>
+    <script>
+      window.onload = getSelectValue();
     </script>
   </body>
 </html>
