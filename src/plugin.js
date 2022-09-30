@@ -90,12 +90,14 @@ class DelightfulPlayer extends Plugin {
 
     for (let i = 0; i < tracks.length; i++) {
       let track = tracks[i];
+      
 
       track.oncuechange = () => {
         if (track.activeCues.length > 0) {
           // Parse the cue as JSON
           let color = JSON.parse(track.activeCues[0].text);
-          // console.log("color: ", color);
+          console.log("color: ", color);
+          track.mode = "hidden";
           if (color.config) {
             try {
               const msg = JSON.stringify(color);
