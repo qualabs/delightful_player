@@ -7,29 +7,29 @@
 .container {
   display: grid;
   grid-template-areas:
-    "div1 div2"
-    "div3 div4";
+    "fl fr"
+    "bl br";
   min-width: 100vw;
   min-height: 100vh;
 }
 
-.div1 {
-  grid-area: div1;
+#fl {
+  grid-area: fl;
 }
 
-.div2 {
-  grid-area: div2;
+#fr {
+  grid-area: fr;
 }
 
-.div3 {
-  grid-area: div3;
+#bl {
+  grid-area: bl;
 }
 
-.div4 {
-  grid-area: div4;
+#br {
+  grid-area: br;
 }
 
-#videojs-delightful-player-player {
+#videoPlayer {
   height: 60vh;
   width: 60vw;
   top: 50%;

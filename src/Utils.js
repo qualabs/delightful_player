@@ -1,10 +1,4 @@
-import videojs from "video.js";
-
-let canvas = document.querySelector(".canvas");
-let ctx = canvas.getContext("2d");
-
-function getCoordenates(channel) {
-  // let canvas = document.querySelector(".canvas");
+function getCoordenates(canvas, channel) {
   switch (channel) {
     case "C":
       return { sx: 1, sy: 1, sw: canvas.width, sh: canvas.height };
@@ -55,9 +49,10 @@ function getCoordenates(channel) {
   }
 }
 
-function getPixels(channel) {
-  // obtain a sub image
-  let coord = getCoordenates(channel);
+function getPixels(canvas, channel) {
+  let ctx = canvas.getContext("2d");
+
+  let coord = getCoordenates(canvas, channel);
   let image = ctx.getImageData(coord.sx, coord.sy, coord.sw, coord.sh);
   let pixels_data = image.data;
 
@@ -85,102 +80,72 @@ function getPixels(channel) {
   return { red: average_red, green: average_green, blue: average_blue };
 }
 
-export function getColors(type) {
-  let json_colors;
+export function getColors(type, canvas) {
+  let jsonColors;
   switch (type) {
     case "mono":
-      let average_pixels_C = getPixels("C");
-      json_colors = {
+      let averagePixelsC = getPixels(canvas, "C");
+      jsonColors = {
         config: "mono",
         channels: {
           C: [
-            average_pixels_C.red,
-            average_pixels_C.green,
-            average_pixels_C.blue,
+            averagePixelsC.red,
+            averagePixelsC.green,
+            averagePixelsC.blue,
           ],
         },
       };
       break;
     case "stereo":
-      let average_pixels_L = getPixels("L");
-      let average_pixels_R = getPixels("R");
-      json_colors = {
+      let averagePixelsL = getPixels(canvas, "L");
+      let averagePixelsR = getPixels(canvas, "R");
+      jsonColors = {
         config: "stereo",
         channels: {
           L: [
-            average_pixels_L.red,
-            average_pixels_L.green,
-            average_pixels_L.blue,
+            averagePixelsL.red,
+            averagePixelsL.green,
+            averagePixelsL.blue,
           ],
           R: [
-            average_pixels_R.red,
-            average_pixels_R.green,
-            average_pixels_R.blue,
+            averagePixelsR.red,
+            averagePixelsR.green,
+            averagePixelsR.blue,
           ],
         },
       };
       break;
     case "surround":
-      let average_pixels_FL = getPixels("FL");
-      let average_pixels_FR = getPixels("FR");
-      let average_pixels_BL = getPixels("BL");
-      let average_pixels_BR = getPixels("BR");
-      json_colors = {
+      let averagePixelsFL = getPixels(canvas, "FL");
+      let averagePixelsFR = getPixels(canvas, "FR");
+      let averagePixelsBL = getPixels(canvas, "BL");
+      let averagePixelsBR = getPixels(canvas, "BR");
+      jsonColors = {
         config: "surround",
         channels: {
           FL: [
-            average_pixels_FL.red,
-            average_pixels_FL.green,
-            average_pixels_FL.blue,
+            averagePixelsFL.red,
+            averagePixelsFL.green,
+            averagePixelsFL.blue,
           ],
           FR: [
-            average_pixels_FR.red,
-            average_pixels_FR.green,
-            average_pixels_FR.blue,
+            averagePixelsFR.red,
+            averagePixelsFR.green,
+            averagePixelsFR.blue,
           ],
           BL: [
-            average_pixels_BL.red,
-            average_pixels_BL.green,
-            average_pixels_BL.blue,
+            averagePixelsBL.red,
+            averagePixelsBL.green,
+            averagePixelsBL.blue,
           ],
           BR: [
-            average_pixels_BR.red,
-            average_pixels_BR.green,
-            average_pixels_BR.blue,
+            averagePixelsBR.red,
+            averagePixelsBR.green,
+            averagePixelsBR.blue,
           ],
         },
       };
       break;
   }
-  // videojs.log(JSON.stringify(json_colors));
-  return json_colors;
-}
-
-export function paintColors(json_colors) {
-  let div1 = document.querySelector(".div1");
-  let div2 = document.querySelector(".div2");
-  let div3 = document.querySelector(".div3");
-  let div4 = document.querySelector(".div4");
-  if (json_colors.config === "mono" && json_colors.channels.length !== 0) {
-    div1.style.backgroundColor = `rgb(${json_colors.channels.C})`;
-    div3.style.backgroundColor = `rgb(${json_colors.channels.C})`;
-    div2.style.backgroundColor = `rgb(${json_colors.channels.C})`;
-    div4.style.backgroundColor = `rgb(${json_colors.channels.C})`;
-  } else if (
-    json_colors.config === "stereo" &&
-    json_colors.channels.length !== 0
-  ) {
-    div1.style.backgroundColor = `rgb(${json_colors.channels.L})`;
-    div3.style.backgroundColor = `rgb(${json_colors.channels.L})`;
-    div2.style.backgroundColor = `rgb(${json_colors.channels.R})`;
-    div4.style.backgroundColor = `rgb(${json_colors.channels.R})`;
-  } else if (
-    json_colors.config === "surround" &&
-    json_colors.channels.length !== 0
-  ) {
-    div1.style.backgroundColor = `rgb(${json_colors.channels.FL})`;
-    div3.style.backgroundColor = `rgb(${json_colors.channels.BL})`;
-    div2.style.backgroundColor = `rgb(${json_colors.channels.FR})`;
-    div4.style.backgroundColor = `rgb(${json_colors.channels.BR})`;
-  }
+  return jsonColors;
 }

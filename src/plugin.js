@@ -1,10 +1,8 @@
 import videojs from "video.js";
 import { version as VERSION } from "../package.json";
-import { getColors, paintColors } from "./Utils.js";
-import "./menu.js";
+
+import { getColors } from "./utils.js";
 import CustomMenuButton from "./menu.js";
-import * as config from "../config.js";
-import { ws } from "./clientSocket.js";
 
 const Plugin = videojs.getPlugin("plugin");
 
@@ -12,139 +10,106 @@ const Plugin = videojs.getPlugin("plugin");
 const defaults = {
   mode: "mono",
 };
-let mode = defaults.mode;
+const DMX_FRAMERATE = 30; // Enttec OpenDMX USB support maximum speed of 30 fps.
+const DMX_VTT_LANGUAGE = "dmx";
 
-/**
- * An advanced Video.js plugin. For more information on the API
- *
- * See: https://blog.videojs.com/feature-spotlight-advanced-plugins/
- */
 class DelightfulPlayer extends Plugin {
-  /**
-   * Create a DelightfulPlayer plugin instance.
-   *
-   * @param  {Player} player
-   *         A Video.js Player instance.
-   *
-   * @param  {Object} [options]
-   *         An optional options object.
-   *
-   *         While not a core part of the Video.js plugin architecture, a
-   *         second argument of options is a convenient way to accept inputs
-   *         from your plugin's caller.
-   */
   constructor(player, options) {
-    // the parent class will add player under this.player
     super(player);
 
     this.options = videojs.mergeOptions(defaults, options);
+    this.canvas = document.createElement("canvas");
+    this.olaServer = null;
+
+    if (this.options.serverUrl) {
+      try {
+        this.olaServer = new WebSocket(this.options.serverUrl);
+      } catch (error) {
+        videojs.log.error("[deLIGHTful] Connecting with OLA server: ", error);
+      }
+    }
 
     this.player.ready(() => {
       this.player.addClass("vjs-delightful-player2");
+      let menu_button = new CustomMenuButton(this.player, this.options);
+      player.controlBar.addChild(menu_button);
     });
 
     this.player.on("loadedmetadata", () => {
-      let canvas = document.querySelector(".canvas");
       let video = this.player.tech_.el_;
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
+      this.canvas.width = video.videoWidth;
+      this.canvas.height = video.videoHeight;
     });
 
-    this.player.on("playing", function () {
-      videojs.log("playback began!");
+    this.player.on("canplay", this.start.bind(this));
+
+    this.player.on("mode", (_, lightingMode) => {
+      this.options.mode = lightingMode.content;
     });
 
-    this.player.on("canplay", this.textColor.bind(this, this.player));
-
-    this.player.on("mode", function (event, new_modo) {
-      mode = new_modo.content;
-    });
+    this.player.on('dispose', () => {
+      this.olaServer?.close();
+    })
   }
 
-  textColor(player) {
-    if (player.textTracks_.tracks_.length > 0) {
-      let trackExist = false;
-      let tracks = player.textTracks_.tracks_;
-      let i = 0;
-      while (!trackExist && i < tracks.length) {
-        if (tracks[i].src) {
-          trackExist = true;
-        }
-        i++;
-      }
-      if (trackExist) {
-        console.log("tracks");
-        this.sendColorFromTrack(player);
-      } else {
-        console.log("canvas");
-        player.on("play", this.loop.bind(this, this.player));
-        let menu_button = new CustomMenuButton(this.player, this.options);
-        player.controlBar.addChild(menu_button);
-      }
-    }
+  start() {
+    this.findDMXTextTracks();
+    this.player.on("play", this.loop.bind(this));
   }
 
-  sendColorFromTrack(player) {
+  findDMXTextTracks() {
     // Get all text tracks for the current player.
-    let tracks = player.textTracks_.tracks_;
+    let tracks = this.player.textTracks_.tracks_;
 
     for (let i = 0; i < tracks.length; i++) {
       let track = tracks[i];
-      
+
+      if (track.language !== DMX_VTT_LANGUAGE) {
+        continue;
+      }
 
       track.oncuechange = () => {
         if (track.activeCues.length > 0) {
-          // Parse the cue as JSON
-          let color = JSON.parse(track.activeCues[0].text);
-          console.log("color: ", color);
-          track.mode = "hidden";
-          if (color.config) {
-            try {
-              const msg = JSON.stringify(color);
-              if (ws.readyState == 1) {
-                ws.send(msg);
-              }
-            } catch (error) {
-              console.log("Error when send package. Error: " + error);
-            }
-          }
+          const command = JSON.parse(track.activeCues[0].text);
+          const jsonMsg = { config: "custom", ...command }
+
+          this.sendDMXCommand(jsonMsg);
+          this.player.trigger("colorChanged", jsonMsg);
         }
       };
     }
   }
 
-  loop(player) {
-    let canvas = document.querySelector(".canvas");
-    let ctx = canvas.getContext("2d");
+  loop() {
+    let ctx = this.canvas.getContext("2d");
 
-    if (!player.paused() && !player.ended()) {
-      ctx.drawImage(player.tech_.el_, 0, 0);
-      let jsonColor = getColors(mode);
-      if (!config.MODOWEB) {
-        try {
-          const msg = JSON.stringify(jsonColor);
-          if (ws.readyState == 1) {
-            ws.send(msg);
-          }
-        } catch (error) {
-          console.log("Error when send package. Error: " + error);
-        }
-      } else {
-        paintColors(jsonColor);
+    if (!this.player.paused() && !this.player.ended()) {
+      ctx.drawImage(this.player.tech_.el_, 0, 0);
+      let jsonColor = getColors(this.options.mode, this.canvas);
+
+      this.sendDMXCommand(jsonColor);
+      this.player.trigger("colorChanged", jsonColor);
+
+      setTimeout(this.loop.bind(this), 1000 / DMX_FRAMERATE);
+    }
+  }
+
+  sendDMXCommand(command) {
+    if (this.olaServer?.readyState == WebSocket.OPEN) {
+      try {
+        const msg = JSON.stringify(command);
+        this.olaServer.send(msg);
+      } catch (error) {
+        videojs.log.error("[deLIGHTful] Sending package to OLA server: ", error);
       }
-      console.log("Msg sent ", JSON.stringify(jsonColor));
-      setTimeout(this.loop.bind(this, player), 1000 / 30); // drawing at 30fps
     }
   }
 }
 
 // Define default values for the plugin's `state` object here.
 DelightfulPlayer.defaultState = {};
-
-// Include the version number.
 DelightfulPlayer.VERSION = VERSION;
 
-// Register the plugin with video.js.
 videojs.registerPlugin("delightfulPlayer", DelightfulPlayer);
 
 export default DelightfulPlayer;

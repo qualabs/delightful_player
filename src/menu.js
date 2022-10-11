@@ -12,7 +12,6 @@ class CustomMenuButton extends MenuButton {
   }
 
   createItems() {
-    videojs.log("createItems");
     let mono_item = new MenuItem(this.player(), { label: "Mono" });
     mono_item.handleClick = function () {
       this.player().trigger("mode", { content: "mono" });

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>videojs-delightful-player Demo</title>
+    <title>videojs-delightful-player demo</title>
     <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet" />
     <link href="dist/videojs-delightful-player.css" rel="stylesheet" />
     <link rel="stylesheet" href="./css/styles.css" />
@@ -11,8 +11,8 @@
   <body>
     <div class="container">
       <canvas class="canvas"></canvas>
-      <div class="color-div div1"></div>
-      <div class="color-div div2"></div>
+      <div id="fl" class="color-div front-left left center"></div>
+      <div id="fr" class="color-div front-right right center"></div>
       <div class="div-url">
         <select
           onchange="getSelectValue()"
@@ -23,31 +23,22 @@
           <option value="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8">
             Big buck bunny
           </option>
-          <option
-            value="http://playertest.longtailvideo.com/adaptive/wowzaid3/playlist.m3u8"
-          >
-            Animals
-          </option>
-          <option value="http://localhost:9999/video/cars2.mp4">Cars 2</option>
-          <option
-            value="http://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8"
-          >
+          <option value="http://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8">
             Skate
           </option>
         </select>
         <div class="div-input-btn">
           <input id="input-url" type="text" placeholder="Enter a video url" />
-          <button id="submit-btn" onclick="getInputValue()">Submit</button>
+          <button id="submit-btn" onclick="getInputValue()">Load</button>
         </div>
       </div>
       <div data-vjs-player>
         <video
-          id="videojs-delightful-player-player"
+          id="videoPlayer"
           class="video-js vjs-default-skin vjs-big-play-centered"
           controls
           muted
         >
-          <!-- <track label="color" default src="./subtitles/subtitlesCars2.vtt" /> -->
           <source
             id="my-source"
             src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
@@ -62,55 +53,71 @@
           </p>
         </video>
       </div>
-      <div class="color-div div3"></div>
-      <div class="color-div div4"></div>
+      <div id="bl" class="color-div back-left left center"></div>
+      <div id="br" class="color-div back-right right center"></div>
     </div>
 
     <script src="node_modules/video.js/dist/video.js"></script>
     <script src="dist/videojs-delightful-player.js"></script>
     <script>
-      (function (window, videojs) {
-        var examplePlayer = (window.examplePlayer = videojs(
-          "videojs-delightful-player-player"
-        ));
-        var delightfulPlayer = (window.delightfulPlayer =
-          examplePlayer.delightfulPlayer());
-      })(window, window.videojs);
-    </script>
-
-    <!-- personal functions: -->
-    <script>
-      function getInputValue() {
-        const file = document.getElementById("input-url");
-        const video = videojs("videojs-delightful-player-player");
-        const videoExtension = file.value.split(".").pop();
-        // HLS:
-        // video for test: https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8
-        if (videoExtension === "m3u8") {
-          video.src({
-            src: file.value,
-            type: "application/x-mpegURL",
-          });
-        } // DASH:
-        // video for test: https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd
-        else if (videoExtension === "mpd") {
-          video.src({
-            src: file.value,
-            type: "application/dash+xml",
-          });
+      var player = videojs("videoPlayer", {
+        plugins: {
+          delightfulPlayer: {
+            serverUrl: "ws://192.168.109.237:5679"
+          }
         }
+      });
+      window.player = player;
+
+      player.on('colorChanged', (_, value) => {          
+          switch (value.config) {
+            case "mono":
+              document.querySelectorAll(".center").forEach((e) => {  e.style.backgroundColor = `rgb(${value.channels.C})`; });
+              break;
+            case "stereo":
+              document.querySelectorAll(".left").forEach((e) => { e.style.backgroundColor = `rgb(${value.channels.L})`; });
+              document.querySelectorAll(".right").forEach((e) => { e.style.backgroundColor = `rgb(${value.channels.R})`; });
+              break;
+            case "surround":
+              document.querySelector(".front-left").style.backgroundColor = `rgb(${value.channels.FL})`;
+              document.querySelector(".front-right").style.backgroundColor = `rgb(${value.channels.FR})`;
+              document.querySelector(".back-left").style.backgroundColor = `rgb(${value.channels.BL})`;
+              document.querySelector(".back-right").style.backgroundColor = `rgb(${value.channels.BR})`;
+              break;
+            default:
+              console.log("Custom command", value.channels);
+          }
+        })
+
+        function getInputValue() {
+          const videoUrl = document.getElementById("input-url");
+          const videoExtension = videoUrl.value.split(".").pop();
+          let src  = { src: videoUrl.value };
+
+          if (videoExtension === "m3u8") {
+            src.type = "application/x-mpegURL";
+          }
+
+          if (videoExtension === "mpd") {
+            src.type = "application/dash+xml";
+          }
+
+          console.log(src);
+          window.player.src(src);
       }
-    </script>
-    <script>
+
       function getSelectValue() {
         const file = document.getElementById("video-examples");
         const value = file.options[file.selectedIndex].value;
-        const video = videojs("videojs-delightful-player-player");
-        video.src(value);
+        window.player.src(value);
       }
-    </script>
-    <script>
-      window.onload = getSelectValue();
+
+      window.onload = () => {
+        const file = document.getElementById("video-examples");
+        const value = file.options[file.selectedIndex].value;
+        window.player.src(value);
+      }
+
     </script>
   </body>
 </html>
