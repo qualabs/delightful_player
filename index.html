@@ -20,6 +20,9 @@
           id="video-examples"
           class="selector"
         >
+          <option value="https://d2wrczxv2223b.cloudfront.net/baadd666-0491-40f4-a02d-932a01628c63/hls/output.m3u8">
+            Rihanna
+          </option>  
           <option value="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8">
             Big buck bunny
           </option>
@@ -63,7 +66,7 @@
       var player = videojs("videoPlayer", {
         plugins: {
           delightfulPlayer: {
-            serverUrl: "ws://192.168.109.237:5679"
+            serverUrl: "ws://10.30.1.2:5679"
           }
         }
       });
