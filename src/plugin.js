@@ -21,6 +21,7 @@ class DelightfulPlayer extends Plugin {
     this.canvas = document.createElement("canvas");
     this.olaServer = null;
     this.lightLock = false;
+    this.bpm= null
 
     if (this.options.serverUrl) {
       try {
@@ -96,10 +97,8 @@ class DelightfulPlayer extends Plugin {
       ctx.drawImage(this.player.tech_.el_, 0, 0);
       let jsonColor = getColors(this.options.mode, this.canvas);
       if (!this.lightLock) {
-        this.lightLock = true;
         this.sendDMXCommand(jsonColor);
         this.player.trigger("colorChanged", jsonColor);
-        this.lightLock = false;
       }
 
       setTimeout(this.loop.bind(this), 1000 / DMX_FRAMERATE);
@@ -115,15 +114,11 @@ class DelightfulPlayer extends Plugin {
         R: [255, 255, 255]
       }
     }
-
-    if (!this.lightLock) {
-      this.lightLock = true;
-      this.sendDMXCommand(flash);
-      this.lightLock = false;
-    }
+    this.lightLock = true;
+    this.sendDMXCommand(flash);
+    this.lightLock = false;
     // flash.channels.L = flash.channels.R = [0, 0, 0]
-    setTimeout(this.flashLoop.bind(this), 500);
-
+    setTimeout(this.flashLoop.bind(this), 483);
   }
 
   sendDMXCommand(command) {

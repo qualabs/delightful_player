@@ -20,8 +20,15 @@
           id="video-examples"
           class="selector"
         >
-          <option value="https://d2wrczxv2223b.cloudfront.net/baadd666-0491-40f4-a02d-932a01628c63/hls/output.m3u8">
+          <!-- <option value="https://d2wrczxv2223b.cloudfront.net/baadd666-0491-40f4-a02d-932a01628c63/hls/output.m3u8"> -->
+          <option value="http://localhost:9999/input.mp4">
             Rihanna
+          </option> 
+          <option value="http://localhost:9999/shakira.mp4">
+            Shakira
+          </option>
+          <option value="http://localhost:9999/believer.mp4">
+            Imagine Dragons
           </option>  
           <option value="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8">
             Big buck bunny
@@ -42,6 +49,7 @@
           controls
           muted
         >
+          <!-- <track default srclang="dmx" src="/texttracks.vtt" /> -->
           <source
             id="my-source"
             src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
